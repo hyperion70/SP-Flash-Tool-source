@@ -13,6 +13,7 @@ MemoryTestSetting::MemoryTestSetting()
       ram_dedicated_pattern_test_(false),
       ram_inc_dec_pattern_test_(false),
       dram_flip_test_(false),
+      dram_interface_diagnose_test_(false),
       nand_flash_test_(false),
       nand_dedicated_pattern_test_(false),
       emmc_flash_test_(false),

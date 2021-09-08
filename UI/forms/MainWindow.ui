@@ -89,7 +89,16 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -101,7 +110,16 @@
           <enum>QFrame::Sunken</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <property name="spacing">
@@ -295,7 +313,16 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -559,7 +586,16 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
          </layout>
@@ -673,8 +709,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>196</width>
-             <height>67</height>
+             <width>198</width>
+             <height>70</height>
             </rect>
            </property>
            <attribute name="label">
@@ -695,7 +731,7 @@
      <x>0</x>
      <y>0</y>
      <width>1025</width>
-     <height>18</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -743,9 +779,6 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="actionShow_Welcome"/>
-    <addaction name="separator"/>
-    <addaction name="actionContents"/>
-    <addaction name="actionIndex"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="action_SoftwareUpdate"/>

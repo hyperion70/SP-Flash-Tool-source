@@ -11,7 +11,8 @@ OTPSetting::OTPSetting():
     cb_param_process_init(NULL),
     cb_param_process(NULL),
     cb_post_process_init(NULL),
-    cb_post_process(NULL)
+    cb_post_process(NULL),
+    cb(NULL)
 {}
 
 OTPSetting::~OTPSetting()
@@ -27,6 +28,7 @@ QSharedPointer<APCore::ICommand> OTPSetting::CreateCommand(APKey key)
     cmd->otp_arg_.set_otp_len(len);
     cmd->otp_arg_.set_otp_data(data.data());
     cmd->set_otp_file(this->file);
+    cmd->set_icallback(cb);
 
     if(NULL != cb_param_process_init)
         cmd->otp_arg_.set_para_process_init(cb_param_process_init);

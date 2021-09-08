@@ -28,6 +28,7 @@ public:
     bool ram_dedicated_pattern_test() { return ram_dedicated_pattern_test_; }
     bool ram_inc_dec_pattern_test() { return ram_inc_dec_pattern_test_; }
     bool dram_flip_test() { return dram_flip_test_; }
+    bool dram_interface_diagnose_test() { return dram_interface_diagnose_test_;}
 
     bool nand_flash_test() { return nand_flash_test_; }
     bool nand_dedicated_pattern_test() { return nand_dedicated_pattern_test_; }
@@ -45,6 +46,7 @@ public:
     void set_ram_dedicated_pattern_test(bool enable) { ram_dedicated_pattern_test_ = enable; }
     void set_ram_inc_dec_pattern_test(bool enable) { ram_inc_dec_pattern_test_ = enable; }
     void set_dram_flip_test(bool enable) { dram_flip_test_ = enable; }
+    void set_dram_interface_diagnose_test(bool enable) { dram_interface_diagnose_test_ = enable;}
 
     void set_nand_flash_test(bool enable) { nand_flash_test_ = enable; }
     void set_nand_dedicated_pattern_test(bool enable) { nand_dedicated_pattern_test_ = enable; }
@@ -75,6 +77,7 @@ private:
     bool ram_dedicated_pattern_test_;
     bool ram_inc_dec_pattern_test_;
     bool dram_flip_test_;
+    bool dram_interface_diagnose_test_;
 
     bool nand_flash_test_;
     bool nand_dedicated_pattern_test_;

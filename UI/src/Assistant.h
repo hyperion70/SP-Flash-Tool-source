@@ -14,7 +14,7 @@ public:
     explicit Assistant(QObject *parent = 0);
     ~Assistant();
     bool StartAssistant();
-    void ShowDocumentation(const QString& page, bool showContent = false, bool showIndex = false);
+    void ShowDocumentation(const QString& page);
 
 private:
     void UpdateCacheDir(void);

@@ -177,6 +177,7 @@ void MemoryTestWidget::on_SELECT_ALL_clicked()
     else
     {
         selectAllTestItems(true);
+        ui_->checkBox_dram_interface_diagnose->setCheckState(Qt::Unchecked);
     }
 }
 
@@ -231,9 +232,10 @@ bool MemoryTestWidget::isSelectNothing()
             return ui_->RAM_TEST->isChecked() == false;
         }
     }
-    else //for new arch chip, only support dram flip test
+    else //for new arch chip, only support dram flip test && dram full calibration
     {
-        return ui_->DRAM_FLIP_TEST->isChecked() == false;
+        return !ui_->DRAM_FLIP_TEST->isChecked()
+                && !ui_->checkBox_dram_interface_diagnose->isChecked();
     }
 
     return true;
@@ -263,6 +265,11 @@ void MemoryTestWidget::ShowRAMTest(bool isShow)
 void MemoryTestWidget::ShowDRAMFlipTest(bool isShow)
 {
     ui_->DRAM_FLIP_TEST->setVisible(isShow);
+}
+
+void MemoryTestWidget::ShowDRAMInterfaceDiagnose(bool isShow)
+{
+    ui_->checkBox_dram_interface_diagnose->setVisible(isShow);
 }
 
 void MemoryTestWidget::ShowDRAMRepairBtn(bool isShow)
@@ -336,6 +343,11 @@ QSharedPointer<APCore::MemoryTestSetting> MemoryTestWidget::CreateMemtestSetting
         }
     }
 
+    if(!ui_->checkBox_dram_interface_diagnose->isHidden())
+    {
+        setting->set_dram_interface_diagnose_test(ui_->checkBox_dram_interface_diagnose->isChecked());
+    }
+
     if(!ui_->NAND_FLASH_TEST->isHidden())
     {
         setting->set_nand_flash_test(ui_->NAND_FLASH_TEST->isChecked());
@@ -383,6 +395,7 @@ void MemoryTestWidget::HideFlashTestItems()
     ShowEMMCTest(false);
     ShowNANDTest(false);
     ShowDRAMRepairBtn(false);
+    ShowDRAMInterfaceDiagnose(false);
 }
 
 void MemoryTestWidget::onPlatformChanged()
@@ -392,6 +405,7 @@ void MemoryTestWidget::onPlatformChanged()
     {
         ShowRAMTest(true);
         ShowDRAMFlipTest(false);
+        ShowDRAMInterfaceDiagnose(false);
         HW_StorageType_E storage =
                   main_window_->main_controller()->GetPlatformSetting()->getFlashToolStorageConfig().GetStorageType();
 
@@ -405,6 +419,7 @@ void MemoryTestWidget::onPlatformChanged()
     {
         ShowRAMTest(false);
         ShowDRAMFlipTest(true);
+        ShowDRAMInterfaceDiagnose(true);
         ShowEMMCTest(false);
         ShowNANDTest(false);
     }
@@ -434,4 +449,18 @@ void MemoryTestWidget::OnDRAMRepairFinished()
     main_window_->DoFinished();
 
     emit signal_dram_repair_finished();
+}
+
+void MemoryTestWidget::on_checkBox_dram_interface_diagnose_clicked(bool checked)
+{
+    //if do dram interface diagnose, uncheck all memory test
+    if(checked)
+        selectAllTestItems(false);
+}
+
+void MemoryTestWidget::on_DRAM_FLIP_TEST_clicked(bool checked)
+{
+    //if do dram filp test, uncheck dram interface diagnose
+    if(checked)
+        ui_->checkBox_dram_interface_diagnose->setCheckState(Qt::Unchecked);
 }

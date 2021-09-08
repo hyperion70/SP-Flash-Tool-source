@@ -1,4 +1,4 @@
-@set path=%path%;C:\Program Files\Microsoft Visual Studio 9.0\VC\bin;C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;D:\env
+@set path=%path%;C:\Program Files\Microsoft Visual Studio 9.0\VC\bin;C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin
 @set WORKING_DIR=%cd%
 @set TOOLS_DIR=%WORKING_DIR%\Build\Tools\Windows
 @rem %1: build type(debug or release) %2: clean or not

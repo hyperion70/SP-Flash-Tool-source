@@ -72,17 +72,12 @@ bool Assistant::StartAssistant()
     return true;
 }
 
-void Assistant::ShowDocumentation(const QString &page, bool showContent, bool showIndex)
+void Assistant::ShowDocumentation(const QString &page)
 {
     if (!StartAssistant())
         return;
 
     QByteArray ba;
-
-    if(showContent)
-        ba.append("show contents;");
-    else if(showIndex)
-        ba.append("show index;");
 
     ba.append("setSource qthelp://com.mediatek.flashtool/doc/");
 

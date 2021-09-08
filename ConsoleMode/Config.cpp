@@ -32,7 +32,7 @@ Config::Config(const CommandLineArguments& args)
     if (!config_file.empty())
     {
         LOGI("Init config from config file");
-        LoadFile(config_file, args.OnlyOutput(), args.reboot());
+        LoadFile(config_file, args.OnlyOutput(), args.reboot(), args.reboot_to_atm());
     }
     else
     {
@@ -52,7 +52,7 @@ Config::Config(const CommandLineArguments& args)
         }
         m_pclGeneralSetting = QSharedPointer<GeneralSetting>(new GeneralSetting(power, args.StorageLifeCycleCheck()));
         m_pclCommandSetting = QSharedPointer<CommandSetting>(new CommandSetting(
-            args.GetScatterFilename(), args.GetRSCProjName()));
+            args.GetScatterFilename(), args.GetRSCProjName(), args.reboot_to_atm()));
     }
     m_pclGeneralSetting->vSetArgs(args);
     m_pclCommandSetting->vSetCommand(args.GetCommand());
@@ -62,7 +62,7 @@ Config::~Config()
 {
 }
 
-void Config::LoadFile(const std::string &file_name, bool efuse_read_only, bool reboot)
+void Config::LoadFile(const std::string &file_name, bool efuse_read_only, bool reboot, bool reboot_to_atm)
 {
     XML::Document document(file_name);
     const XML::Node root_node = document.GetRootNode();
@@ -74,7 +74,7 @@ void Config::LoadFile(const std::string &file_name, bool efuse_read_only, bool r
     m_pclGeneralSetting = QSharedPointer<GeneralSetting>(new GeneralSetting(general_node));
 
     XML::Node cmds_node = general_node.GetNextSibling();
-    m_pclCommandSetting = QSharedPointer<CommandSetting>(new CommandSetting(cmds_node, efuse_read_only, reboot));
+    m_pclCommandSetting = QSharedPointer<CommandSetting>(new CommandSetting(cmds_node, efuse_read_only, reboot, reboot_to_atm));
 }
 
 void Config::SaveFile(const std::string &file_name, bool full_general_save) const

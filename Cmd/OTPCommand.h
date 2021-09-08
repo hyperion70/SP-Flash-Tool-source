@@ -4,6 +4,7 @@
 #include "ICommand.h"
 #include "../Conn/Connection.h"
 #include "../Arg/BromOTPArg.h"
+#include "../UI/src/ICallback.h"
 
 namespace APCore
 {
@@ -20,10 +21,13 @@ public:
 
     virtual void exec(const QSharedPointer<APCore::Connection> &conn);
 
+    void set_icallback(ICallback* icb){cb = icb;}
+
 private:
     friend class OTPSetting;
     BromOTPArg otp_arg_;
     std::string path_;
+    ICallback* cb;
 };
 }
 

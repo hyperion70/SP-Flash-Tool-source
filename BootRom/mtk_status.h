@@ -697,6 +697,7 @@ typedef enum {
 	,STATUS_SWITCH_USB_EXCEPTION              = 0xC005000B
 	,STATUS_WRITE_EFUSE_EXCEPTION              = 0xC005000C
 	,STATUS_READ_EFUSE_EXCEPTION              = 0xC005000D
+	,STATUS_FIRMWARE_UPDATE_EXCEPTION         = 0xC005000E
 		
 	//brom
 	,STATUS_BROM_CMD_STARTCMD_FAIL        = 0xC0060001
@@ -749,6 +750,7 @@ typedef enum {
     ,STATUS_CERT_INVALID                 = 0xC003001B
     ,STATUS_STOR_LIFE_WARN         = 0xC003001C
     ,STATUS_STOR_LIFE_EXHAUST    = 0xC003001D
+    ,STATUS_INVALID_FWBIN                = 0xC003001E
     
 	//device info
 	,STATUS_SPARSE_INCOMPLETE            = 0x40040001
@@ -756,8 +758,11 @@ typedef enum {
 	,STATUS_OTP_UNLOCKED                 = 0x40040003
 	,STATUS_CONTINUE                     = 0x40040004
 	,STATUS_COMPLETE                     = 0x40040005
-	,STATUS_DRAM_REPAIR_COMPLETE          = 0x40040006
-	
+	,STATUS_DRAM_REPAIR_COMPLETE         = 0x40040006
+	,STATUS_OTP_LOCKED_TYPE_PERMANENT    = 0x40040007
+	,STATUS_OTP_LOCKED_TYPE_TEMPORARY    = 0x40040008
+	,STATUS_OTP_LOCKED_TYPE_DISABLE      = 0x40040009
+
 	//device err
 	,STATUS_UNSUPPORT_OP                 = 0xC0040001
 	,STATUS_THREAD                       = 0xC0040002
@@ -788,6 +793,9 @@ typedef enum {
 		
 	//DRAM init error
 	,STATUS_EMI_SETTING_VERSION_ERROR    = 0xC0040050
+
+	//ufs err
+	,STATUS_UFS_ERR                      = 0xC0040060
 
 	//otp
 	,STATUS_DA_OTP_NOT_SUPPORT           = 0xC0040100
@@ -904,6 +912,7 @@ typedef enum {
     ,STATUS_SEC_OTP_TABLE_NOT_INIT         = 0xC0020051
     ,STATUS_SEC_INVALID_PART_NAME          = 0xC0020052
     ,STATUS_SEC_INVALID_DA_VER= 0xC0020053
+    ,STATUS_SEC_RPMB_INVALID_MSG_SZ        = 0xC0020054
 
     //end of status_ex
 	

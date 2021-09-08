@@ -4,7 +4,7 @@
     <title>Flash Tool</title>
     <applicationIcon>images/application.png</applicationIcon>
     <cacheDirectory>Mediatek/FlashTool</cacheDirectory>
-    <startPage>qthelp://com.mediatek.flashtool/doc/welcome.htm</startPage>
+    <startPage>qthelp://com.mediatek.flashtool/doc/faqr.htm</startPage>
     <aboutMenuText>
        <text>About Flash Tool</text>
     </aboutMenuText>   

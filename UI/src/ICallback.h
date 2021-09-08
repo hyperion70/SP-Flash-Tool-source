@@ -5,7 +5,13 @@ class ICallback
 {
 public:
     virtual void Execute() = 0;
-    virtual ~ICallback(){};
+    virtual ~ICallback(){}
+
+    void set_arg(void *arg) { usr_arg = arg; }
+    void * get_arg() { return usr_arg; }
+
+private:
+    void* usr_arg;
 };
 
 template <class Receiver>
@@ -22,6 +28,7 @@ public:
 private:
     Receiver* _receiver;
     Action _action;
+
 
 };
 

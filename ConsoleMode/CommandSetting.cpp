@@ -7,10 +7,11 @@
 namespace ConsoleMode
 {
 #define RSC_FILE_NAME "rsc.xml"
-CommandSetting::CommandSetting(const std::string &scatter_file, const std::string &rsc_proj_name):
+CommandSetting::CommandSetting(const std::string &scatter_file, const std::string &rsc_proj_name, bool reboot_to_atm):
     efuse_read_only_(false),
     m_has_rsc_cmd(false),
     m_has_download_cmd(false),
+    m_reboot_to_atm(reboot_to_atm),
     m_scatter_file(scatter_file),
     m_rsc_proj_name(rsc_proj_name)
 {
@@ -21,9 +22,10 @@ CommandSetting::~CommandSetting()
 {
 }
 
-CommandSetting::CommandSetting(const XML::Node &node, bool efuse_read_only, bool reboot):
+CommandSetting::CommandSetting(const XML::Node &node, bool efuse_read_only, bool reboot, bool reboot_to_atm):
     m_has_rsc_cmd(false),
     m_has_download_cmd(false),
+    m_reboot_to_atm(reboot_to_atm),
     efuse_read_only_(efuse_read_only),
     isNeedEnableWatchDog_(reboot)
 {
@@ -38,9 +40,15 @@ void CommandSetting::vSetCommand(const std::string &command)
 
         vCreateSetting(command, XML::Node(NULL));
 
-        if (!m_rsc_proj_name.empty() && this->isDownloadCmd(command))
-        {
-            addRSCSetting();
+        // deal with arguments only for download.
+        if (this->isDownloadCmd(command)) {
+            if (!m_rsc_proj_name.empty())
+            {
+                addRSCSetting();
+            }
+            if (m_reboot_to_atm) {
+                this->vAddSetting(this->CreateResetBootModeSetting());
+            }
         }
 
         // run watch dog command in -s/-c format, specially for dram-repair
@@ -68,15 +76,25 @@ void CommandSetting::SaveXML(XML::Node &node) const
 void CommandSetting::LoadXML(const XML::Node &node)
 {
   //  vClearSetting();
+    bool isDownloadOperation = false;
 
     XML::Node child_node = node.GetFirstChildNode();
     while(!child_node.IsEmpty())
     {
         const std::string node_name = child_node.GetName();
+        if (!isDownloadOperation) {
+            isDownloadOperation = this->isDownloadCmd(node_name);
+        }
         vCreateSetting(node_name, child_node);
         child_node = child_node.GetNextSibling();
     }
 
+    if (isDownloadOperation) {
+        if (m_reboot_to_atm) {
+            this->vAddSetting(this->CreateResetBootModeSetting());
+        }
+    }
+	
     if( isNeedEnableWatchDog_ == true)
     {
         QSharedPointer<ISetting> p2 = CreateWatchDogSetting();
@@ -321,6 +339,12 @@ QSharedPointer<APCore::RSCSetting> CommandSetting::CreateRSCSetting() const
 QSharedPointer<APCore::DRAMRepairSetting> CommandSetting::CreateDRAMRepairSetting() const
 {
     QSharedPointer<APCore::DRAMRepairSetting> setting(new APCore::DRAMRepairSetting());
+    return setting;
+}
+
+QSharedPointer<APCore::SetResetBootModeSetting> CommandSetting::CreateResetBootModeSetting() const
+{
+    QSharedPointer<APCore::SetResetBootModeSetting> setting(new APCore::SetResetBootModeSetting());
     return setting;
 }
 

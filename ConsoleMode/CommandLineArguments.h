@@ -47,6 +47,8 @@ public:
         return m_reboot;
     }
 
+    bool reboot_to_atm() const { return m_reboot_to_atm; }
+
     std::string GetBatteryOption() const{
         return m_battery_option;
     }
@@ -73,6 +75,7 @@ private:
     bool m_onlyOutput;
     bool m_reboot;
     bool m_storage_life_cycle_check;
+    bool m_reboot_to_atm;
     std::string m_rsc_proj_name;
     std::string m_battery_option;
 };

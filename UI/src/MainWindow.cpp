@@ -207,6 +207,8 @@ void MainWindow::CreateConnect()
 
     connect(this, SIGNAL(signal_start_readback()), readback_widget, SLOT(on_toolButton_readBack_clicked()));
     connect(this, SIGNAL(signal_start_format()), format_widget, SLOT(on_toolButton_Start_clicked()));
+
+    connect(this, SIGNAL(signal_update_otp_lock_status()), parameter_widget, SLOT(slot_update_otp_lock_status()), Qt::BlockingQueuedConnection);
 }
 
 void MainWindow::SetInitState()
@@ -654,6 +656,8 @@ QSharedPointer<APCore::OTPSetting> MainWindow::CreateOTPSetting()
    setting->set_post_process_init(main_callbacks_->postProcessInit);
    setting->set_post_process(main_callbacks_->postProcess);
    setting->set_otp_operation(parameter_widget->get_operation());
+   otp_status_callback = new SimpleCallback<MainWindow>(this,&MainWindow::UpdateOTPLockStatus);
+   setting->set_icallback(otp_status_callback);
 
    if(parameter_widget->get_operation() == OTP_READ)
    {
@@ -784,6 +788,11 @@ void MainWindow::DoFinished()
 
         emit signal_UnlockUI();
     }
+}
+
+void MainWindow::UpdateOTPLockStatus()
+{
+    emit signal_update_otp_lock_status();
 }
 
 void MainWindow::startDownload()
@@ -1898,16 +1907,6 @@ void MainWindow::ShowHelpContents(QWidget* parent, int errID, const QString &pag
     QString errMsg = LoadQString(language_tag, errID);
 
     return ShowHelpContents(parent, errMsg, page, report);
-}
-
-void MainWindow::on_actionIndex_triggered()
-{
-   assistant_->ShowDocumentation("welcome.htm", false, true);
-}
-
-void MainWindow::on_actionContents_triggered()
-{
-    assistant_->ShowDocumentation("welcome.htm", true, false);
 }
 
 void MainWindow::on_actionAbout_triggered()

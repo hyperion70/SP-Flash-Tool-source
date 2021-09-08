@@ -73,7 +73,7 @@ void MemoryTestCommand::exec(const QSharedPointer<Connection> &conn)
             memtest_setting.emmc_flash_test()||
             memtest_setting.nand_flash_test()||
             memtest_setting.ufs_flash_test() ||
-            memtest_setting.dram_flip_test())
+            memtest_setting.dram_flip_test() )
     {
     conn->ConnectDA(FIRST_DA, _TRUE);
 
@@ -184,6 +184,21 @@ void MemoryTestCommand::exec(const QSharedPointer<Connection> &conn)
         }
     }
 
+    }
+
+    if(memtest_setting.dram_interface_diagnose_test())
+    {
+        conn->ConnectDA(FIRST_DA, _FALSE);
+        //8. DRAM Interface Diagnose
+        if(memtest_setting.dram_interface_diagnose_test())
+        {
+            UpdateUI("============\t DRAM Interface Diagnose \t============\n", Qt::cyan);
+            int ret = DRAMInterfaceDiagnoseTest(conn->FTHandle());
+            if(ret != S_DONE)
+            {
+                THROW_BROM_EXCEPTION(ret,0);
+            }
+        }
     }
 }
 
@@ -805,6 +820,35 @@ int MemoryTestCommand::UFSPatternTest(FlashTool_MemoryTest_Arg *mt_arg,
     mt_arg->m_test_pattern  = 0x5A5A;
 
     return CHECK_METEST_RESULT(FlashTool_MemoryTest(ft_handle, mt_arg, mt_result));
+}
+
+int MemoryTestCommand::DRAMInterfaceDiagnoseTest(FLASHTOOL_API_HANDLE_T ft_handle)
+{
+    DL_HANDLE_T dl_handle;
+    int ret = FlashTool_GetDLHandle(ft_handle, &dl_handle);
+    if(ret!= STATUS_OK)
+        return ret;
+
+    char preloader_filename[512] = {0};
+    ret = DL_Get_PreloaderFilePath(dl_handle, preloader_filename);
+    if(ret!= STATUS_OK)
+        return ret;
+
+    file_info preloader_info;
+    preloader_info.input_type = OP_SOURCE_FILE;
+    strcpy(preloader_info.file_path, preloader_filename);
+
+    LOGI("call flashtool_enable_dram, with preloader path: %s", preloader_info.file_path);
+
+#define MAX_DRAM_DIAGNOSE_RESULT_LEN 10*1024
+    char dram_if_diagnose_result[MAX_DRAM_DIAGNOSE_RESULT_LEN]={0};
+    uint64 result_len = MAX_DRAM_DIAGNOSE_RESULT_LEN;
+    ret = flashtool_enable_dram((HSESSION)ft_handle, &preloader_info, true, &dram_if_diagnose_result[0], &result_len);
+    if(ret!= STATUS_OK)
+        return ret;
+
+    UpdateUI(QString(QLatin1String((char*)dram_if_diagnose_result)));
+    return ret;
 }
 
 }

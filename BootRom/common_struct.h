@@ -39,6 +39,7 @@ struct reboot_option
 typedef enum reset_boot_mode
 {
 	BM_FASTBOOT = 1,
+	BM_ATM = 2,
 }reset_boot_mode_e;
 
 typedef enum otp_action

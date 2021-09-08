@@ -402,6 +402,8 @@ typedef enum
     C_DATA3_LOCK,
     C_DATA4_LOCK,
     C_DATA5_LOCK,
+    C_DATA6_LOCK,
+    C_DATA7_LOCK,
     C_3P_PID_LOCK,
     C_3P_EPPK_LOCK,
     C_3P_CPD_LOCK, 
@@ -421,6 +423,7 @@ typedef enum
     C_3P_DATA_LOCK_LOCK,
     C_SW_VER_LOCK,
     C_SW_VER_LOCK_LOCK,
+    C_CUSTK_LOCK,
 
     CTRL1,
     SEC_CTRL1,
@@ -435,6 +438,8 @@ typedef enum
     C_DATA_3,
     C_DATA_4,
     C_DATA_5,
+    C_DATA_6,
+    C_DATA_7,
 
     SEC_CAP,
     PROD_EN,
@@ -442,6 +447,7 @@ typedef enum
     CUSTK,
     CUST_CRYPT_DATA,
     CUST_DATA,
+    CUSTID,
     C_3P_PID,
     C_3P_EPPK,
     C_3P_CPD,
@@ -461,6 +467,8 @@ typedef enum
     C_SW_VER1,
     C_SW_VER2,
     C_SW_VER3,
+    C_TEST_VALID,
+    C_TEST_PWD,
     
     END_KEY
 }EFUSE_KEY;
@@ -556,7 +564,8 @@ typedef struct {
     unsigned int    sbc_pubk_hash3_fa_dis;
     unsigned int    sbc_pubk_hash_mtk_fa_dis;
     unsigned int    fa_mode_en;
-    unsigned int    ext_reserved[19]; //32-1-1-1-2
+	unsigned int    fa_mode_dis;
+    unsigned int    ext_reserved[18]; //32-1-1-1-2
 } Efuse_Common_Arg;
 
 // Argument for writing Efuse security register
@@ -635,7 +644,9 @@ typedef struct{
     unsigned int cust_crypt_data_lock; //-1
     unsigned int cust_data_lock; //-1
     unsigned int sbc_pubk_ctrl_lock; //-1
-    unsigned int reserved[24];//32-1-1-1-3-2
+    unsigned int test_pwd_lock; // -1
+    unsigned int sw_ver_lock; //-1
+    unsigned int reserved[22];//32-1-1-1-3-2-1-1
 } Efuse_Lock_Arg;
 
 typedef struct{

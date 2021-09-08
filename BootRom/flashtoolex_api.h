@@ -175,17 +175,17 @@ LIBEX_EXPORT status_t LIB_API flashtool_shutdown_device(HSESSION hs, struct rebo
 //! Or just download some file to specified partition.
 //!
 //! <b>Parameters</b>: hs: the session handle.
-//!   scatter: the scatter file path name & remote file callbacks if need.
-//!                      If just want to download some partitions. set this NULL. 
 //!   flist: the files infomation, include file path and the partition name to which the file is written.
 //!   count: the flist count.
 //!   callbacks: the callback functions used in device operations.
+//!   remote_cbs: callbacks used in remote download
 //!
 //! <b>Returns</b>:  STATUS_OK if success, or other status indicate specified error.
 LIBEX_EXPORT status_t LIB_API flashtool_download(HSESSION hs,
                                       const struct op_part_list_t* flist, uint32 count
                                       ,const struct callbacks_struct_t* callbacks
-                                      ,const struct remote_file_callbacks* remote_cbs);
+                                      ,const struct remote_file_callbacks* remote_cbs
+                                      ,const CB_CHECKSUM_VERIFY_EX cb_checksum_verify_ex);
 
 //! <b>Effects</b>: Upgrade images to device.
 //! Could download images according to scatter file. 
@@ -426,6 +426,15 @@ LIBEX_EXPORT void LIB_API flashtool_get_last_errmsg(HSESSION hs, char* err_msg);
 LIBEX_EXPORT status_t LIB_API flashtool_generate_gpx(HSESSION hs, gpx_struct* gpx, uint8 gpx_count);
 
 LIBEX_EXPORT status_t LIB_API flashtool_pl_chanllenge(HSESSION hs, DATA_DIRECTION_E direct, unsigned char* databuf, unsigned int databuf_len);
+
+//!<b>Effects</b>: enalbe dram or dram interface diagnose
+//!<b>Parameers</b> 	hs: 				the session handle
+//!					preloader_info		preloader info, give emi info to enable dram or dram interface diagnose
+//!					dram_interface_diagnose indicate if do dram interface diagnose, default false
+//!                 dram_if_diagnose_result  return dram_interface_diagnose all result here by char
+//!                 result_len return dram interface diagnose result length
+//!<b>Returns</b> STATUS_OK if success, or other status indicate specified error.
+LIBEX_EXPORT status_t LIB_API flashtool_enable_dram(HSESSION hs, const file_info* preloader_info, bool dram_interface_diagnose = false, char* dram_if_diagnose_result = NULL, uint64* result_len = 0);
 
 #ifdef  __cplusplus
 }

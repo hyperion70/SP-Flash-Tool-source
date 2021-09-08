@@ -84,7 +84,6 @@ public:
     void LoadAuthFile(const QString& file_name);
     void LoadLastAuthFile();
     void LoadCertFile(const QString& file_name);
-    void LoadLastCertFile();
 
     unsigned char GetBootMode_ComType(void);
     unsigned char  GetBootMode_ComId(void);

@@ -141,11 +141,17 @@ void ParameterWidget::on_OTP_clicked()
     ui_->OTP_WriteInfoEdit->setEnabled(uiState);
     ui_->OTPReadInfoEdit->setEnabled(uiState);
     ui_->OTPSettingBtn->setEnabled(uiState);
+    ui_->OTP_GetLockStatus->setEnabled(uiState);
 }
 
 bool ParameterWidget::validateBeforeOTP()
 {
    bool ret = true;
+
+   if (ui_->OTP->isChecked())
+   {
+       ui_->OTP_LockStatusInfo->clear();
+   }
 
    if(ui_->OTP->isChecked()&&
            ui_->OTP_WriteInfoEdit->text().isEmpty()&&
@@ -184,6 +190,11 @@ OTP_OPERATION ParameterWidget::get_operation() const
        operation = this->otp_write_dialog_->get_otp_oper();
     }
 
+    else if(ui_->OTP_GetLockStatus->isChecked())
+    {
+        operation = OTP_GET_LOCK_STATUS;
+    }
+
     return operation;
 }
 
@@ -192,3 +203,43 @@ void ParameterWidget::on_STOP_clicked()
     main_window_->main_controller()->StopByUser();
 }
 
+void ParameterWidget::slot_update_otp_lock_status()
+{
+    QString txt;
+
+    QPalette  *palette = new QPalette();
+    palette->setColor(QPalette::Text, Qt::black);
+
+    ICallback* cb = main_window_->get_otp_status_callback();
+    assert(cb != 0);
+
+    uint32 lock_status = *(uint32*)(cb->get_arg());
+    LOG("lock_status: 0x%x\n", lock_status);
+
+    switch(lock_status)
+    {
+    case STATUS_OTP_LOCKED_TYPE_PERMANENT:
+        txt = "OTP permanent locked";
+        palette->setColor(QPalette::Text, Qt::black);
+        break;
+    case STATUS_OTP_LOCKED_TYPE_TEMPORARY:
+        txt = "OTP temporary locked";
+        palette->setColor(QPalette::Text, Qt::red);
+        break;
+    case STATUS_OTP_UNLOCKED:
+    case STATUS_OTP_LOCKED_TYPE_DISABLE:
+        txt = "OTP unlocked";
+        palette->setColor(QPalette::Text, Qt::black);
+        break;
+    case STATUS_OTP_LOCKED:
+        txt = "OTP locked";
+        palette->setColor(QPalette::Text, Qt::black);
+        break;
+    default:
+        txt = "OTP_UNKNOWN_STATUS";
+        palette->setColor(QPalette::Text, Qt::red);
+        break;
+    }
+    ui_->OTP_LockStatusInfo->setPalette(*palette);
+    ui_->OTP_LockStatusInfo->setText(txt);
+}

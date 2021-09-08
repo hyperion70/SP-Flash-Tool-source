@@ -166,6 +166,7 @@ typedef BOOL (__stdcall *CB_NOTIFY_STOP)(pvoid _this);
 typedef int (__stdcall *CB_REMOTE_READ_FILE)(const char *filepath, unsigned long long offset, unsigned char * const p_file_content, unsigned int package_length, void *user_arg);
 typedef int (__stdcall *CB_REMOTE_GET_FILE_LENGTH)(const char *filepath, unsigned long long * const p_file_length, void *user_arg);
 typedef int (__stdcall *CB_CHECKSUM_VERIFY)(const char* partition_name, unsigned int checksum);
+typedef int (__stdcall *CB_CHECKSUM_VERIFY_EX)(const char* partition_name, const char* filepath, unsigned int checksum);
 typedef int (__stdcall *CB_SLA_CHALLENGE)
 (
  void *usr_arg ,
@@ -219,6 +220,7 @@ typedef struct connect_params_struct_t
    BOOL   enable_dram_in_1st_da;
    uint32 da_log_level;
    uint32 da_log_channel;
+   uint32 ufs_provision;
 }connect_params_struct_t;
 
 //The device info struct size is 8K.

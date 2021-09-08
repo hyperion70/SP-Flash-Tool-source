@@ -36,6 +36,7 @@ public:
     void ShowNANDTest(bool isShow);
     void ShowRAMTest(bool isShow);
     void ShowDRAMFlipTest(bool isShow);
+    void ShowDRAMInterfaceDiagnose(bool isShow);
     void ShowDRAMRepairBtn(bool isShow);
     void clearUIText();
     void OnDRAMRepairFinished();
@@ -67,6 +68,8 @@ private slots:
     void on_toolButton_stop_clicked();
     void on_radioButton_dramtest_manual_clicked(bool checked);
     void on_radioButton_dramtest_auto_clicked(bool checked);
+    void on_checkBox_dram_interface_diagnose_clicked(bool checked);
+    void on_DRAM_FLIP_TEST_clicked(bool checked);
 };
 
 #endif // MEMORYTESTWIDGET_H
