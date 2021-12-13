@@ -34,4 +34,15 @@ typedef int                   status_t;
 typedef long HSESSION;
 #define INVALID_HSESSION_VALUE 0
 
+/*
+ * Definitions for NULL
+ */
+#ifndef NULL
+#ifndef __cplusplus
+#define NULL          ((void*)0)
+#else
+#define NULL          0
+#endif
+#endif
+
 #endif

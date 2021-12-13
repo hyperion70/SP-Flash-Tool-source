@@ -11,6 +11,7 @@ PWD                           := $(TOOLS_DIR)\pwd.exe
 MV                            := $(TOOLS_DIR)\mv.exe
 CDDIR                         := cd
 SETUP_VCVAR                   := call "C:\Program Files\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
+ENV_EVE                       := "C:\QtSDK\Symbian\tools\sbs\win32\cygwin\bin\env.exe"
 
 FlashTool.CCFLAGS           := -r -spec win32-msvc2008 "CONFIG+=$(BUILD_TYPE)"
 
@@ -41,7 +42,7 @@ set-up:
 #Step2: qmake *.pro + make	
 all: set-up   
 	$(CDDIR) $(OUTPUT_PATH) & $(QMAKE) $(WORKING_DIR) $(FlashTool.CCFLAGS)  
-	$(CDDIR) $(OUTPUT_PATH) & $(SETUP_VCVAR) & env.exe -u MAKE -u MAKEFLAGS $(JOM)
+	$(CDDIR) $(OUTPUT_PATH) & $(SETUP_VCVAR) & ${ENV_EVE} -u MAKE -u MAKEFLAGS $(JOM)
 	$(eval FlashTool.Dir := $(OUTPUT_PATH)/$(BUILD_TYPE))
 	$(CP) $(FlashTool.Dependency.Files) $(FlashTool.Dir)
 	$(CP) -R $(FlashTool.Dependency.Dirs) $(FlashTool.Dir)
@@ -54,5 +55,5 @@ all: set-up
 	
 .PHONY: clean
 clean: 
-	$(CDDIR) $(OUTPUT_PATH) & $(SETUP_VCVAR) & env.exe -u MAKE -u MAKEFLAGS $(JOM) clean
+	$(CDDIR) $(OUTPUT_PATH) & $(SETUP_VCVAR) & ${ENV_EVE} -u MAKE -u MAKEFLAGS $(JOM) clean
 	$(CDDIR) $(OUTPUT_PATH)/$(BUILD_TYPE) & $(RM) -rf $(FlashTool.Output.Files)

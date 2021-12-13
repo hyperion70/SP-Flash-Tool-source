@@ -5,6 +5,7 @@
 #include "../BootRom/flashtool_api.h"
 #include "../Cmd/OTPCommand.h"
 #include "../XMLParser/XMLNode.h"
+#include "../UI/src/ICallback.h"
 
 namespace APCore
 {
@@ -65,12 +66,15 @@ public:
 
     virtual QSharedPointer<APCore::ICommand> CreateCommand(APKey key);
 
+    void set_icallback(ICallback* icb){cb = icb;}
+
 private:
 
     CALLBACK_PARAM_PROGRESS_INIT cb_param_process_init;
     CALLBACK_PARAM_PROGRESS cb_param_process;
     CALLBACK_POST_PROCESS_INIT cb_post_process_init;
     CALLBACK_POST_PROCESS cb_post_process;
+    ICallback* cb;
 
     OTP_OPERATION operation;
     unsigned int addr;

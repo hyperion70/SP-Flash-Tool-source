@@ -63,6 +63,7 @@ void DLWithoutScatterCommand::exec(const QSharedPointer<Connection> &conn){
                 flist,
                 part_list_.size(),
                 &cbs,
+                NULL,
                 NULL);
 
     LOGI("Download result: %s(%d)", StatusToString(status), status);

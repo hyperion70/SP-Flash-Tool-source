@@ -10,11 +10,10 @@ namespace APCore
 static const std::map<DA_LOG_CHANNEL_E, QString>::value_type DA_LOG_CHANNEL_INIT[] ={
     std::map<DA_LOG_CHANNEL_E, QString>::value_type(DA_LOG_CHANNEL_NONE, "NONE"),
     std::map<DA_LOG_CHANNEL_E, QString>::value_type(DA_LOG_CHANNEL_UART, "UART"),
-    std::map<DA_LOG_CHANNEL_E, QString>::value_type(DA_LOG_CHANNEL_USB, "USB"),
-    std::map<DA_LOG_CHANNEL_E, QString>::value_type(DA_LOG_CHANNEL_UART_USB, "UART_USB")
+    std::map<DA_LOG_CHANNEL_E, QString>::value_type(DA_LOG_CHANNEL_USB, "USB")
 };
 
-static const std::map<DA_LOG_CHANNEL_E, QString> DA_LOG_CHANNEL_MAP(DA_LOG_CHANNEL_INIT, DA_LOG_CHANNEL_INIT + 4);
+static const std::map<DA_LOG_CHANNEL_E, QString> DA_LOG_CHANNEL_MAP(DA_LOG_CHANNEL_INIT, DA_LOG_CHANNEL_INIT + 3);
 
 DA_LOG_CHANNEL_E getDALogChannelType(const QString &da_log_channel_name)
 {

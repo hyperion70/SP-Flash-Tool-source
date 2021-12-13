@@ -269,9 +269,14 @@ typedef enum {
 typedef enum{
 	DA_LOG_CHANNEL_NONE = 0,
 	DA_LOG_CHANNEL_UART = 1,
-	DA_LOG_CHANNEL_USB = 2,
-	DA_LOG_CHANNEL_UART_USB = 3
+	DA_LOG_CHANNEL_USB = 2
 }DA_LOG_CHANNEL_E;
+
+typedef enum{
+	UFS_NO_FORCE_PROVISION = 0,
+	UFS_FORCE_PROVISION = 1,
+	UFS_SKIP_PROVISION = 2
+}DA_UFS_PROVISION_E;
 
 typedef struct {
 
@@ -314,7 +319,9 @@ typedef struct {
 	_BOOL									m_1st_da_enable_dram;
 
 	DA_LOG_LEVEL_E                          m_da_log_level;
-	DA_LOG_CHANNEL_E						m_da_log_channel;	
+	DA_LOG_CHANNEL_E						m_da_log_channel;
+
+    DA_UFS_PROVISION_E                      m_ufs_provision;
 } FlashTool_Connect_Arg;
 
 typedef struct {
@@ -829,6 +836,7 @@ typedef enum {
     ,OTP_WRITE
     ,OTP_LOCK
     ,OTP_WRITE_AND_LOCK
+    ,OTP_GET_LOCK_STATUS
     ,OTP_OPERATION_END
 } OTP_OPERATION;
 
@@ -1219,7 +1227,7 @@ LIBEXPORT int __stdcall FlashTool_Device_Control(FLASHTOOL_API_HANDLE_T ft_handl
 /* chipname: in MTxxxx format */
 LIBEXPORT bool __stdcall FlashTool_Chip_isOldArch(const char* chipname);
 
-#define SEC_DATA_MAX_LENGTH 4096
+#define SEC_DATA_MAX_LENGTH 2048
 
 struct ft_sec_str_buffer
 {

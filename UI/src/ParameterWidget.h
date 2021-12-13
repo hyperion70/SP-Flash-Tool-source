@@ -37,7 +37,7 @@ private:
 signals:
 
 public slots:
-
+    void slot_update_otp_lock_status();
 private slots:
     void on_OTPSettingBtn_clicked();
     void on_UPDATE_clicked();

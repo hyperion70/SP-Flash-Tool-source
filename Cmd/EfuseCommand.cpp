@@ -514,7 +514,9 @@ void EfuseCommand::DumpLockArg(
     DumpEfuseOpt(lock, sbc_pubk_hash1_lock);
     DumpEfuseOpt(lock, sbc_pubk_hash2_lock);
     DumpEfuseOpt(lock, sbc_pubk_hash3_lock);
-    DumpEfuseOpt(lock, cust_crypt_data_lock);	  
+    DumpEfuseOpt(lock, cust_crypt_data_lock);
+    DumpEfuseOpt(lock, test_pwd_lock);
+    DumpEfuseOpt(lock, sw_ver_lock);
 }
 
 void EfuseCommand::DumpSTBLockArg(const STB_Lock_PARAM *stb_lock)

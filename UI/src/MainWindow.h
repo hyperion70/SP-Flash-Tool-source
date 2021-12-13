@@ -199,6 +199,7 @@ public:
 
     void LockOnUI(); //called in UI thread
     void DoFinished(); //called in any thread
+    void UpdateOTPLockStatus();
     void ResetStatus();
     void UpdateWindowTitle(bool enableTrace = false);
     void LoadScatterFile();
@@ -288,6 +289,8 @@ public:
     QString storageLabelText() const;
     bool LibDAMatchChecked();
 
+    ICallback* get_otp_status_callback(){return otp_status_callback;}
+
 private:
     Ui::MainWindow *ui;
     MainController *main_controller_;
@@ -358,6 +361,8 @@ private:
     //For send error report
     SendReport *send_report_;
 
+    ICallback* otp_status_callback;
+
     friend class MainWindowCallback;
 
     void EnableMenus(bool enable);
@@ -389,6 +394,7 @@ signals:
     void signal_err_msg(int err_code, const std::string &err);
     void signal_start_readback();
     void signal_start_format();
+    void signal_update_otp_lock_status();
 
 public slots:
     void slot_show_err(int err_code, const std::string &err);
@@ -429,8 +435,6 @@ private slots:
     void on_actionSecurity_Mode_triggered();
     void on_actionOpen_Logs_Folder_triggered();
     void on_actionReadback_triggered();
-    void on_actionIndex_triggered();
-    void on_actionContents_triggered();
     void on_actionShow_Welcome_triggered();
     void on_actionCerfitication_download_triggered();
     void slot_current_changed(int index);

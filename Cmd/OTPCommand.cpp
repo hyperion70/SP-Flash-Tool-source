@@ -12,7 +12,8 @@ namespace APCore
 {
 
 OTPCommand::OTPCommand(APKey key)
-    :ICommand(key)
+    :ICommand(key),
+      cb(NULL)
 {
 }
 
@@ -59,11 +60,35 @@ void OTPCommand::exec(const QSharedPointer<APCore::Connection> &conn)
         LOG("OTP Lock result: %s(%d)", StatusToString(ret), ret);
         break;
 
+    case OTP_GET_LOCK_STATUS:
+        ret = FlashTool_OTP_LockCheckStatus(conn->FTHandle());
+        LOG("OTP GetLockStatus result: %s(0x%x)", StatusToString(ret), ret);
+        break;
     default:
         break;
     }
 
-    if(ret != S_DONE)
+    if(otp_arg_.GetBromParaArg().m_param.m_otp_op == OTP_GET_LOCK_STATUS)
+    {
+        //update to UI lock status info
+
+        if(ret == STATUS_OTP_UNLOCKED
+          || ret == STATUS_OTP_LOCKED
+          || ret == STATUS_OTP_LOCKED_TYPE_PERMANENT
+          || ret == STATUS_OTP_LOCKED_TYPE_TEMPORARY
+          || ret == STATUS_OTP_LOCKED_TYPE_DISABLE)
+        {
+            if(cb) {
+                cb->set_arg(&ret);
+                cb->Execute();
+            }
+        }
+        else
+        {
+           THROW_BROM_EXCEPTION(ret,0);
+        }
+    }
+    else if(ret != S_DONE)
     {
         THROW_BROM_EXCEPTION(ret,0);
     }

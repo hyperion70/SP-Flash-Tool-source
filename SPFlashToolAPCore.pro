@@ -234,7 +234,9 @@ SOURCES += \
     Setting/FWSetting.cpp \
     Cmd/ICommand.cpp \
     Cmd/UFSConfigCommand.cpp \
-    Setting/UFSConfigSetting.cpp
+    Setting/UFSConfigSetting.cpp \
+    Cmd/SetResetBootModeCommand.cpp \
+    Setting/SetResetBootModeSetting.cpp
 
 # ONLY Windows related begins here
 win32:SOURCES += Host/Win/RuntimeMemory.cpp \
@@ -458,7 +460,9 @@ HEADERS += \
     Cmd/FWCommand.h \
     UI/src/fw.h \
     Cmd/UFSConfigCommand.h \
-    Setting/UFSConfigSetting.h
+    Setting/UFSConfigSetting.h \
+    Cmd/SetResetBootModeCommand.h \
+    Setting/SetResetBootModeSetting.h
 
 win32:HEADERS += UI/src/UpdateDialog.h \
     UI/src/CheckUpdateDialog.h \

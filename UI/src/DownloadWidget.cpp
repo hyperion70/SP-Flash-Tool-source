@@ -259,17 +259,6 @@ void DownloadWidget::LoadCertFile(const QString& filename)
     LOG("The certFile history list size is %d.\n", certFile_historyList_.size());
 }
 
-void DownloadWidget::LoadLastCertFile()
-{
-    IniItem item("history.ini", "RecentOpenFile", "certHistory");
-    certFile_historyList_ = item.GetStringListValue();
-    if(!certFile_historyList_.isEmpty())
-    {
-        QString lastCert = certFile_historyList_[0];
-        LoadCertFile(lastCert);
-    }
-}
-
 
 void DownloadWidget::on_pushButton_CertFile_clicked()
 {

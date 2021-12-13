@@ -144,16 +144,15 @@ void EfuseSetting::LoadXML(const XML::Node &node)
       {
          LoadCommonCtrl(child_node);
       }
-	  else if (_STRICMP(node_tag, "sbc-pubk-ctrl"))
-	  {
+	  	else if (_STRICMP(node_tag, "sbc-pubk-ctrl"))
+	  	{
 	      //mt8168 added for parse sbc_pubk_ctrl node
 	      LoadSbcPubkCtrl(child_node);
-	  }
-	  else if(_STRICMP(node_tag, "fa-ctrl"))
-	  {
-	      // mt8168 added for parse fa mode ctrl
+	  	}
+	  	else if(_STRICMP(node_tag, "fa-ctrl"))
+	  	{
 	      LoadFaModeCtrl(child_node);
-	  }
+	  	}
       else if (_STRICMP(node_tag, "custom-ctrl"))
       {
          //add for MT8695, HASH1~3 ctrl should be custom ctrl
@@ -233,6 +232,14 @@ void EfuseSetting::LoadXML(const XML::Node &node)
       else if(_STRICMP(node_tag, "c_data_5")||_STRICMP(node_tag, "c_data5"))
       {
          LoadCData5(child_node);
+      }
+      else if(_STRICMP(node_tag, "c_data6"))
+      {
+         LoadCData6(child_node);
+      }
+      else if(_STRICMP(node_tag, "c_data7"))
+      {
+         LoadCData7(child_node);
       }
       else if (_STRICMP(node_tag, "sbc-pub-key"))
       {
@@ -328,6 +335,14 @@ void EfuseSetting::LoadXML(const XML::Node &node)
       {
          LoadSbcPubKey3(child_node);
       }
+      else if (_STRICMP(node_tag, "test-ctrl"))
+      {
+         LoadTestCtrl(child_node);
+      }
+     else if (_STRICMP(node_tag, "custid"))
+      {
+         LoadCustID(child_node);
+      }
       /*
       else
       {
@@ -374,10 +389,12 @@ void EfuseSetting::LoadSbcPubkCtrl(
 void EfuseSetting::LoadFaModeCtrl(
 	const  XML::Node &node)
 {
-    string text;
+  string text;
 
 	text = node.GetAttribute("Enable_FA");
 	common_arg_.fa_mode_en = Bool2EfuseOpt(text);
+	text = node.GetAttribute("DISABLE_FA");
+	common_arg_.fa_mode_dis = Bool2EfuseOpt(text);
 }
 
 void EfuseSetting::LoadCommonCtrl(
@@ -738,6 +755,9 @@ void EfuseSetting::LoadCommonLock(
 
    text = node.GetAttribute("spare_lock");
    lock_arg_.spare_lock = Bool2EfuseOpt(text);
+
+   text = node.GetAttribute("test_pwd_lock");
+   lock_arg_.test_pwd_lock = Bool2EfuseOpt(text);
 }
 
 void EfuseSetting::LoadSecureLock(
@@ -780,6 +800,9 @@ void EfuseSetting::LoadSecureLock(
 
    text = node.GetAttribute("sbc_pubk_ctrl_lock");
    lock_arg_.sbc_pubk_ctrl_lock = Bool2EfuseOpt(text);
+   
+   text = node.GetAttribute("sw_ver_lock");
+   lock_arg_.sw_ver_lock = Bool2EfuseOpt(text);
 }
 
 void EfuseSetting::LoadMHWRes(const XML::Node &node)
@@ -856,6 +879,16 @@ void EfuseSetting::LoadCLock(
    extra_arg_.items[C_DATA5_LOCK].key = C_DATA5_LOCK;
    extra_arg_.items[C_DATA5_LOCK].type = T_BOOLEAN;
    extra_arg_.items[C_DATA5_LOCK].data.enable = Bool2EfuseOpt(text);
+
+   text = node.GetAttribute("c_data6_lock");
+   extra_arg_.items[C_DATA6_LOCK].key = C_DATA6_LOCK;
+   extra_arg_.items[C_DATA6_LOCK].type = T_BOOLEAN;
+   extra_arg_.items[C_DATA6_LOCK].data.enable = Bool2EfuseOpt(text);
+
+   text = node.GetAttribute("c_data7_lock");
+   extra_arg_.items[C_DATA7_LOCK].key = C_DATA7_LOCK;
+   extra_arg_.items[C_DATA7_LOCK].type = T_BOOLEAN;
+   extra_arg_.items[C_DATA7_LOCK].data.enable = Bool2EfuseOpt(text);
 
    text = node.GetAttribute("c_3p_pid_lock");
    extra_arg_.items[C_3P_PID_LOCK].key = C_3P_PID_LOCK;
@@ -951,6 +984,11 @@ void EfuseSetting::LoadCLock(
    extra_arg_.items[C_SW_VER_LOCK_LOCK].key = C_SW_VER_LOCK_LOCK;
    extra_arg_.items[C_SW_VER_LOCK_LOCK].type = T_BOOLEAN;
    extra_arg_.items[C_SW_VER_LOCK_LOCK].data.enable = Bool2EfuseOpt(text);
+   
+   text = node.GetAttribute("c_custk_lock");
+   extra_arg_.items[C_CUSTK_LOCK].key = C_CUSTK_LOCK;
+   extra_arg_.items[C_CUSTK_LOCK].type = T_BOOLEAN;
+   extra_arg_.items[C_CUSTK_LOCK].data.enable = Bool2EfuseOpt(text);
 }
 
 void EfuseSetting::LoadCtrlKey(
@@ -963,6 +1001,26 @@ void EfuseSetting::LoadSecCtrl1Key(
    const XML::Node &node)
 {
    LoadUnitValue(SEC_CTRL1, node);
+}
+
+void EfuseSetting::LoadTestCtrl(
+   const XML::Node &node)
+{
+   string text;
+
+   text = node.GetAttribute("test-valid");
+   extra_arg_.items[C_TEST_VALID].key = C_TEST_VALID;
+   extra_arg_.items[C_TEST_VALID].type = T_BOOLEAN;
+   extra_arg_.items[C_TEST_VALID].data.enable = Bool2EfuseOpt(text);
+   
+   text = node.GetFirstChildNode().GetText();
+   extra_arg_.items[C_TEST_PWD].key = C_TEST_PWD;
+   extra_arg_.items[C_TEST_PWD].type = T_BUF;
+
+   if(Str2Buf(&extra_arg_.items[C_TEST_PWD].data.key_pair.key, text))
+   {
+      extra_arg_.items[C_TEST_PWD].data.key_pair.key_blow = EFUSE_ENABLE;
+   }
 }
 
 void EfuseSetting::LoadCCtrl0Key(
@@ -1045,6 +1103,19 @@ void EfuseSetting::LoadCData5(
 {
    LoadKey(C_DATA_5, node);
 }
+
+void EfuseSetting::LoadCData6(
+   const XML::Node &node)
+{
+   LoadKey(C_DATA_6, node);
+}
+
+void EfuseSetting::LoadCData7(
+   const XML::Node &node)
+{
+   LoadKey(C_DATA_7, node);
+}
+
 
 void EfuseSetting::LoadUnitValue(EFUSE_KEY key,
    const XML::Node &node)
@@ -1209,6 +1280,13 @@ void EfuseSetting::LoadCustData(
 {
    LoadKey(CUST_DATA, node);
 }
+
+void EfuseSetting::LoadCustID(
+   const XML::Node &node)
+{
+   LoadKey(CUSTID, node);
+}
+
 void EfuseSetting::LoadSWVer0(
    const XML::Node &node)
 {

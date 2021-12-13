@@ -18,7 +18,7 @@ public:
     Config(const CommandLineArguments& args);
     ~Config();
 
-    void LoadFile(const std::string &file_name, bool efuse_read_only = false, bool reboot = false);
+    void LoadFile(const std::string &file_name, bool efuse_read_only = false, bool reboot = false, bool reboot_to_atm = false);
     void SaveFile(const std::string &file_name, bool full_general_save = true) const;
 
     QSharedPointer<GeneralSetting> pclGetGeneralSetting() const

@@ -70,12 +70,17 @@ static const string CONSOLE_MODE_CUSTOMER_USAGE = CONSOLE_MODE_USAGE;
 static const string CONSOLE_MODE_INTERNAL_USAGE = CONSOLE_MODE_USAGE + (
             "  --rsc  Specify the project name in rsc.xml, ONLY support download/format-download/firmware-upgrade for internal tool.\n"
             "          flash_tool -s MT6575_Anroid_scatter.txt -c download --rsc k75v1_64_rsc_cn[op02]\n"
+            "  --atm  Set to reboot to ATM mode after download, ONLY support download/format-download/firmware-upgrade for internal tool.\n"
+            "          flash_tool -s MT6575_Anroid_scatter.txt -c download --atm\n"
             );
 
 const QString SUPPORTED_CMDS("combo-format,download-only,format-download,firmware-upgrade,cert-download,efuse,dram-repair");
 
+#ifndef _WIN32
 #define RSC_ARG_TYPE 1
 #define STOR_LIFE_CYCLE_CHECK_ARG_TYPE 2
+#define ATM_ARG_TYPE 3
+#endif
 
 const static std::map<std::string, char>::value_type LONG_SHORT_ARG_INIT_VALUES[] = {
     std::map<std::string, char>::value_type("config", 'i'),
@@ -91,7 +96,8 @@ const static std::map<std::string, char>::value_type LONG_SHORT_ARG_INIT_VALUES[
     std::map<std::string, char>::value_type("disable_storage_life_cycle_check", '\0'),
     std::map<std::string, char>::value_type("help", 'h'),
     std::map<std::string, char>::value_type("efuse_read_only", 'o'),
-    std::map<std::string, char>::value_type("auth_file", 'a')
+    std::map<std::string, char>::value_type("auth_file", 'a'),
+    std::map<std::string, char>::value_type("--atm", '\0')
 };
 const static std::map<string, char> LONG_SHORT_ARG_MAP(LONG_SHORT_ARG_INIT_VALUES, LONG_SHORT_ARG_INIT_VALUES + \
                                                        sizeof(LONG_SHORT_ARG_INIT_VALUES) / sizeof(LONG_SHORT_ARG_INIT_VALUES[0]));
@@ -109,7 +115,8 @@ CommandLineArguments::CommandLineArguments()
      m_onlyOutput(false),
      m_reboot(false),
      m_battery_option("auto"),
-     m_storage_life_cycle_check(true)
+     m_storage_life_cycle_check(true),
+     m_reboot_to_atm(false)
 {
 }
 
@@ -191,6 +198,7 @@ bool CommandLineArguments::Parse(int argc, char **argv)
       {"disable_storage_life_cycle_check", no_argument, NULL, STOR_LIFE_CYCLE_CHECK_ARG_TYPE},
       {"help", no_argument, NULL, 'h'},
       {"auth_file", required_argument, NULL, 'a'},
+      {"atm", no_argument, NULL, ATM_ARG_TYPE},
       {0, 0, 0, 0}
     };
 
@@ -210,6 +218,9 @@ bool CommandLineArguments::Parse(int argc, char **argv)
             {
                 if (!m_szInputFilename.empty()) return false;
                 m_rsc_proj_name = optarg;
+                continue;
+            } else if (c == ATM_ARG_TYPE) {
+                m_reboot_to_atm = true;
                 continue;
             }
         }
@@ -333,6 +344,9 @@ bool CommandLineArguments::Parse(int argc, char **argv)
                     if (++i >= argc) return false;
                     if (!m_szInputFilename.empty()) return false;
                     m_rsc_proj_name = argv[i];
+                    continue;
+                } else if (arg == "--atm") {
+                    m_reboot_to_atm = true;
                     continue;
                 }
             }

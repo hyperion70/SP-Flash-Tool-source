@@ -110,6 +110,8 @@ private:
                          FlashTool_MemoryTest_Result *mt_result,
                          const DA_REPORT_T &da_report,
                          FLASHTOOL_API_HANDLE_T ft_handle);
+
+    int DRAMInterfaceDiagnoseTest(FLASHTOOL_API_HANDLE_T ft_handle);
 };
 
 }

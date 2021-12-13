@@ -93,7 +93,7 @@ OptionDialog::OptionDialog(QWidget *parent, MainWindow *mainWindow) :
     ui->comboBox_da_log_level->addItems(items);
 
     items.clear();
-    items << tr("NONE") << tr("UART") << tr("USB") << tr("UART && USB");
+    items << tr("NONE") << tr("UART") << tr("USB");
     ui->comboBox_da_log_channel->addItems(items);
 
     items.clear();
@@ -273,7 +273,10 @@ void OptionDialog::LoadGeneralSettings()
 
     item.SetItemName("DALogChannel");
     int daLogChannelIndex = item.GetIntValue();
-    ui->comboBox_da_log_channel->setCurrentIndex(daLogChannelIndex == -1 ? 1 : daLogChannelIndex); //defalut: uart
+    if (daLogChannelIndex < 0 || daLogChannelIndex >= ui->comboBox_da_log_channel->count()) {
+        daLogChannelIndex = 1; // default for UART
+    }
+    ui->comboBox_da_log_channel->setCurrentIndex(daLogChannelIndex);
 
 #ifdef _WIN32
     if(ToolInfo::IsCustomerVer())
